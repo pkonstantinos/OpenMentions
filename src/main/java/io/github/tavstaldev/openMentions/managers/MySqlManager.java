@@ -36,6 +36,10 @@ public class MySqlManager implements IDatabase {
     /** Logger instance for logging messages related to MySqlManager. */
     private static final PluginLogger _logger = OpenMentions.Logger().WithModule(MySqlManager.class);
 
+    public MySqlManager() {
+        load();
+    }
+
     /**
      * Initializes the database connection pool.
      */
