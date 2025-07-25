@@ -1,0 +1,49 @@
+General:
+  NoPermission: "%prefix% &cYou have no permission to do that."
+  PlayerNotFound: "%prefix% &cFailed to get the '&e%player%&c' player."
+
+Commands:
+  ConsoleCaller: "%prefix% &cYou must be a player to use this command."
+  UnknownError: "%prefix% &cUnknown error happened. Please report it."
+  Common:
+    InvalidPage: "%prefix% &cThe page number must be a valid integer."
+  Help:
+    Desc: "Shows information about the commands."
+    Title: "&e=== &aOpenMentions Help &e=== &aPage &c%current_page%&a/&c%max_page% &e==="
+    Info: "   &c[] &7- &6Required   &c<> &7- &6Optional"
+    Line: "&2/mentions %subcommand%&a%syntax% &8» &7%description%"
+    Bottom: "&e====== %previous_btn%&6%current_page%&e/&6%max_page%%next_btn% &e======"
+    PrevBtn: "&a<<< "
+    NextBtn: " &a>>>"
+  Version:
+    Desc: "Shows the plugin version."
+    Current: "%prefix% &aYou are using the '&3%version%&a' version of OpenMentions."
+    UpToDate: "%prefix% &aOpenMentions is up to date."
+    Outdated: "%prefix% &cOpenMentions is outdated. You can download it here: &e%link%"
+  Reload:
+    Desc: "Reloads the plugin config and its messages."
+    Done: "%prefix% &aThe plugin has been reloaded."
+  Sound:
+    Desc: "Sets the mention sound option."
+    Syntax: " [sound]"
+    Usage: "%prefix% &aUsage: &e/mentions sound [sound]"
+    Invalid: "%prefix% &cThe &e%value%&c sound option is invalid."
+    Set: "%prefix% &aYou have set the mention sound option to &e%value%&a."
+  Display:
+    Desc: "Sets the mention display option."
+    Syntax: " [value]"
+    Usage: "%prefix% &aUsage: &e/mentions display [value]"
+    Invalid: "%prefix% &cThe &e%value%&c display option is invalid."
+    Set: "%prefix% &aYou have set the mention display option to &e%value%&a."
+  Preference:
+    Desc: "Sets the mention preference option."
+    Syntax: " [value]"
+    Usage: "%prefix% &aUsage: &e/mentions preference [value]"
+    Invalid: "%prefix% &cThe &e%value%&c mention preference option is invalid."
+    Set: "%prefix% &aYou have set the mention preference option to &e%value%&a."
+
+Messages:
+  Chat: "%prefix% &aYou have been mentioned by &e%player%&a."
+  ActionBar: "&aYou have been mentioned by &e%player%&a."
+
+FileVersion: 1
