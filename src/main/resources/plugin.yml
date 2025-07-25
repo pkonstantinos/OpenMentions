@@ -1,0 +1,29 @@
+main: io.github.tavstaldev.openMentions.OpenMentions
+api-version: '1.13'
+version: '${version}'
+
+name: OpenMentions
+prefix: OpenMentions
+authors: [ Zoltan 'Tavstal' Solymosi ]
+description: Basic plugin to notify players about their mentions in chat.
+website: https://tavstaldev.github.io/
+softdepend: [CombatLogX]
+
+commands:
+  mentions:
+    description: Main command for OpenMentions plugin.
+    usage: /mentions help
+    aliases: [om, openmentions]
+    permission: openmentions.commands.mentions
+    permission-message: You do not have permission to use this command.
+
+permissions:
+  openmentions.commands.mentions:
+    description: Allows use of the /mentions command.
+    default: true
+  openmentions.commands.version:
+    description: Allows viewing the OpenMentions plugin version.
+    default: op
+  openmentions.commands.reload:
+    description: Allows reloading the OpenMentions plugin.
+    default: op
