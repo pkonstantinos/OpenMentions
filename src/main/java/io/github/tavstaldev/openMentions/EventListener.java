@@ -80,7 +80,7 @@ public class EventListener implements Listener {
      *
      * @param event The AsyncChatEvent triggered when a player sends a chat message.
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChatted(AsyncChatEvent event) {
         Player senderPlayer = event.getPlayer();
         //noinspection ConstantValue
