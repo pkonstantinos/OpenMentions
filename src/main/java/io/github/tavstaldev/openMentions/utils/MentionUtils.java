@@ -120,7 +120,7 @@ public class MentionUtils {
      * @param mentioner The player who mentioned the target player.
      */
     private static void sendMention(Player player, String soundKey, EMentionDisplay display, boolean isSilent, Player mentioner) {
-        String actionBarMessage = OpenMentions.Instance.getTranslator().Localize("General.ActionBarMessage", Map.of("player", mentioner.getName()));
+        String actionBarMessage = OpenMentions.Instance.getTranslator().Localize(player, "General.ActionBarMessage", Map.of("player", mentioner.getName()));
         float volume = (float)OpenMentions.GetConfig().getDouble("settings.volume");
         float pitch = (float)OpenMentions.GetConfig().getDouble("settings.pitch");
         XSound sound;
