@@ -12,6 +12,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -79,7 +80,7 @@ public class EventListener implements Listener {
      *
      * @param event The AsyncChatEvent triggered when a player sends a chat message.
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatted(AsyncChatEvent event) {
         Player senderPlayer = event.getPlayer();
         //noinspection ConstantValue
