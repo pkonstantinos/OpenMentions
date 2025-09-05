@@ -61,13 +61,7 @@ public final class OpenMentions extends PluginBase {
      * Constructor for the OpenMentions plugin.
      * Initializes the plugin with its name, version, author, download URL, and supported languages.
      */
-    public OpenMentions() {
-        super("OpenMentions",
-                "1.0.0",
-                "Tavstal",
-                "https://github.com/TavstalDev/OpenMentions/releases/latest",
-                new String[]{"eng", "hun"}
-        );
+    public OpenMentions() {super("https://github.com/TavstalDev/OpenMentions/releases/latest");
     }
 
     /**
@@ -77,6 +71,8 @@ public final class OpenMentions extends PluginBase {
     @Override
     public void onEnable() {
         Instance = this;
+        _config = new OMConfig();
+        _translator = new PluginTranslator(this, new String[]{"eng", "hun"});
         _logger.Info(String.format("Loading %s...", getProjectName()));
 
         if (VersionUtils.isLegacy()) {

@@ -1,6 +1,8 @@
 General:
   NoPermission: "%prefix% &cYou have no permission to do that."
   PlayerNotFound: "%prefix% &cFailed to get the '&e%player%&c' player."
+  ChatMessage: "%prefix% &e%player% &ahas mentioned you."
+  ActionBarMessage: "&e%player% &ahas mentioned you."
 
 Commands:
   ConsoleCaller: "%prefix% &cYou must be a player to use this command."
@@ -41,9 +43,5 @@ Commands:
     Usage: "%prefix% &aUsage: &e/mentions preference [value]"
     Invalid: "%prefix% &cThe &e%value%&c mention preference option is invalid."
     Set: "%prefix% &aYou have set the mention preference option to &e%value%&a."
-
-Messages:
-  Chat: "%prefix% &aYou have been mentioned by &e%player%&a."
-  ActionBar: "&aYou have been mentioned by &e%player%&a."
 
 FileVersion: 1

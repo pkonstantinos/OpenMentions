@@ -1,6 +1,8 @@
 General:
   NoPermission: "%prefix% &cNincs jogosultságod ehhez a művelethez."
   PlayerNotFound: "%prefix% &cNem sikerült megtalálni a következőt: '&e%player%&c'."
+  ChatMessage: "%prefix% &e%player% &amegemlített."
+  ActionBarMessage: "&e%player% &amegemlített."
 
 Commands:
   ConsoleCaller: "%prefix% &cEzt a parancsot csak játékosként használhatod."
@@ -41,9 +43,5 @@ Commands:
     Usage: "%prefix% &aHasználat: &e/mentions preference [érték]"
     Invalid: "%prefix% &cA(z) &e%value%&c preferenciabeállítás érvénytelen."
     Set: "%prefix% &aAz említés preferenciáját beállítottad erre: &e%value%&a."
-
-Messages:
-  Chat: "%prefix% &e%player% &amegemlített."
-  ActionBar: "&e%player% &amegemlített."
 
 FileVersion: 1

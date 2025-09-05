@@ -120,9 +120,7 @@ public class MentionUtils {
      * @param mentioner The player who mentioned the target player.
      */
     private static void sendMention(Player player, String soundKey, EMentionDisplay display, boolean isSilent, Player mentioner) {
-        var translator = OpenMentions.Translator();
-        String chatMessage = translator.Localize("Messages.Chat", Map.of("player", mentioner.getName()));
-        String actionBarMessage = translator.Localize("Messages.ActionBar", Map.of("player", mentioner.getName()));
+        String actionBarMessage = OpenMentions.Instance.getTranslator().Localize("General.ActionBarMessage", Map.of("player", mentioner.getName()));
         float volume = (float)OpenMentions.GetConfig().getDouble("settings.volume");
         float pitch = (float)OpenMentions.GetConfig().getDouble("settings.pitch");
         XSound sound;
@@ -132,14 +130,14 @@ public class MentionUtils {
 
         switch (display) {
             case ALL: {
-                OpenMentions.Instance.sendRichMsg(player, chatMessage);
+                OpenMentions.Instance.sendLocalizedMsg(player, "General.ChatMessage", Map.of("player", mentioner.getName()));
                 player.sendActionBar(ChatUtils.translateColors(actionBarMessage, true));
                 if (!isSilent)
                     sound.play(player, volume, pitch);
                 break;
             }
             case ONLY_CHAT: {
-                OpenMentions.Instance.sendRichMsg(player, chatMessage);
+                OpenMentions.Instance.sendLocalizedMsg(player, "General.ChatMessage", Map.of("player", mentioner.getName()));
                 break;
             }
             case ONLY_SOUND: {
@@ -152,13 +150,13 @@ public class MentionUtils {
                 break;
             }
             case CHAT_AND_SOUND: {
-                OpenMentions.Instance.sendRichMsg(player, chatMessage);
+                OpenMentions.Instance.sendLocalizedMsg(player, "General.ChatMessage", Map.of("player", mentioner.getName()));
                 if (!isSilent)
                     sound.play(player, volume, pitch);
                 break;
             }
             case CHAT_AND_ACTIONBAR: {
-                OpenMentions.Instance.sendRichMsg(player, chatMessage);
+                OpenMentions.Instance.sendLocalizedMsg(player, "General.ChatMessage", Map.of("player", mentioner.getName()));
                 player.sendActionBar(ChatUtils.translateColors(actionBarMessage, true));
                 break;
             }
