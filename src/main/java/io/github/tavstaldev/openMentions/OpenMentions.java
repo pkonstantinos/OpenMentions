@@ -6,6 +6,8 @@ import io.github.tavstaldev.minecorelib.core.PluginTranslator;
 import io.github.tavstaldev.minecorelib.utils.VersionUtils;
 import io.github.tavstaldev.openMentions.commands.CommandMentions;
 import io.github.tavstaldev.openMentions.commands.CommandsMentionsCompleter;
+import io.github.tavstaldev.openMentions.events.ChatListener;
+import io.github.tavstaldev.openMentions.events.PlayerListener;
 import io.github.tavstaldev.openMentions.managers.CombatLogManager;
 import io.github.tavstaldev.openMentions.managers.CombatManager;
 import io.github.tavstaldev.openMentions.managers.MySqlManager;
@@ -92,7 +94,8 @@ public final class OpenMentions extends PluginBase {
         }
 
         // Register Events
-        EventListener.init();
+        new PlayerListener();
+        new ChatListener();
 
         // Generate config file
         saveDefaultConfig();
