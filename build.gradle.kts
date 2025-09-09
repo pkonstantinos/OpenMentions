@@ -58,8 +58,6 @@ dependencies {
     compileOnly("com.github.sirblobman.api:core:${sirblobmanApiVersion}")
     compileOnly("com.github.sirblobman.combatlogx:api:${sirblobmanCombatLogVersion}")
 
-    // YAML parsing library
-    implementation("org.yaml:snakeyaml:${snakeYamlVersion}")
     // HikariCP for database connection pooling
     implementation("com.zaxxer:HikariCP:${hikariCpVersion}")
     // Custom library for core functionality
@@ -80,9 +78,7 @@ tasks.shadowJar {
         attributes["paperweight-mappings-namespace"] = "spigot" // Add custom manifest attributes
     }
     // Relocate packages to avoid conflicts
-    relocate("org.yaml", "${projectPackageName}.shadow.snakeyaml")
     relocate("com.zaxxer.hikari", "${projectPackageName}.shadow.hikari")
-    relocate("org.slf4j", "${projectPackageName}.shadow.slf4j")
     relocate("com.cryptomorin.xseries", "${projectPackageName}.shadow.xseries")
 }
 

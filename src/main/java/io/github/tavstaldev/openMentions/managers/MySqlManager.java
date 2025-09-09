@@ -3,12 +3,12 @@ package io.github.tavstaldev.openMentions.managers;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
+import io.github.tavstaldev.openMentions.OMConfig;
 import io.github.tavstaldev.openMentions.OpenMentions;
 import io.github.tavstaldev.openMentions.models.EMentionDisplay;
 import io.github.tavstaldev.openMentions.models.EMentionPreference;
 import io.github.tavstaldev.openMentions.models.IDatabase;
 import io.github.tavstaldev.openMentions.models.PlayerDatabaseData;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
@@ -26,25 +26,17 @@ public class MySqlManager implements IDatabase {
     /** HikariDataSource instance for managing database connections. */
     private static HikariDataSource _dataSource;
 
-    /**
-     * Retrieves the plugin configuration.
-     *
-     * @return The plugin's configuration file.
-     */
-    private static FileConfiguration getConfig() { return OpenMentions.Instance.getConfig(); }
+    private OMConfig _config;
 
     /** Logger instance for logging messages related to MySqlManager. */
     private static final PluginLogger _logger = OpenMentions.Logger().WithModule(MySqlManager.class);
-
-    public MySqlManager() {
-        load();
-    }
 
     /**
      * Initializes the database connection pool.
      */
     @Override
     public void load() {
+        _config = OpenMentions.Config();
         _dataSource = CreateDataSource();
     }
 
@@ -68,11 +60,11 @@ public class MySqlManager implements IDatabase {
         try {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(String.format("jdbc:mysql://%s:%s/%s",
-                    getConfig().getString("storage.host"),
-                    getConfig().getString("storage.port"),
-                    getConfig().getString("storage.database"))); // Address of your running MySQL database
-            config.setUsername(getConfig().getString("storage.username")); // Username
-            config.setPassword(getConfig().getString("storage.password")); // Password
+                    _config.storageHost,
+                    _config.storagePort,
+                    _config.storageDatabase));
+            config.setUsername(_config.storageUsername);
+            config.setPassword(_config.storagePassword);
             config.setMaximumPoolSize(10); // Pool size defaults to 10
             config.setMaxLifetime(30000);
             return new HikariDataSource(config);
@@ -94,7 +86,7 @@ public class MySqlManager implements IDatabase {
                             "Sound VARCHAR(200) NOT NULL, " +
                             "Display VARCHAR(32) NOT NULL, " +
                             "Preference VARCHAR(32) NOT NULL);",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.executeUpdate();
         } catch (Exception ex) {
@@ -115,7 +107,7 @@ public class MySqlManager implements IDatabase {
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("INSERT INTO %s_players (PlayerId, Sound, Display, Preference) " +
                             "VALUES (?, ?, ?, ?);",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, playerId.toString());
                 statement.setString(2, soundKey);
@@ -138,7 +130,7 @@ public class MySqlManager implements IDatabase {
     public void updateSound(UUID playerId, String soundKey) {
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("UPDATE %s_players SET Sound=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, soundKey);
                 statement.setString(2, playerId.toString());
@@ -159,7 +151,7 @@ public class MySqlManager implements IDatabase {
     public void updateDisplay(UUID playerId, EMentionDisplay display) {
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("UPDATE %s_players SET Display=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, display.name());
                 statement.setString(2, playerId.toString());
@@ -180,7 +172,7 @@ public class MySqlManager implements IDatabase {
     public void updatePreference(UUID playerId, EMentionPreference preference) {
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("UPDATE %s_players SET Preference=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, preference.name());
                 statement.setString(2, playerId.toString());
@@ -203,7 +195,7 @@ public class MySqlManager implements IDatabase {
     public void updateData(UUID playerId, String soundKey, EMentionDisplay display, EMentionPreference preference) {
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("UPDATE %s_players SET Sound=?, Display=?, Preference=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, soundKey);
                 statement.setString(2, display.name());
@@ -225,7 +217,7 @@ public class MySqlManager implements IDatabase {
     public void removeData(UUID playerId) {
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("DELETE FROM %s_players WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, playerId.toString());
                 statement.executeUpdate();
@@ -256,7 +248,7 @@ public class MySqlManager implements IDatabase {
         List<PlayerDatabaseData> data = new ArrayList<>();
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("SELECT * FROM %s_players;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) {
@@ -287,7 +279,7 @@ public class MySqlManager implements IDatabase {
         PlayerDatabaseData data = null;
         try (Connection connection = _dataSource.getConnection()) {
             String sql = String.format("SELECT * FROM %s_players WHERE PlayerId=? LIMIT 1;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, playerId.toString());
                 try (ResultSet result = statement.executeQuery()) {

@@ -42,7 +42,7 @@ public class EventListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        var config = OpenMentions.GetConfig();
+        var config = OpenMentions.Config();
         Player player = event.getPlayer();
         var playerId = player.getUniqueId();
         PlayerDatabaseData databaseData = OpenMentions.Database.getData(playerId);
@@ -91,14 +91,14 @@ public class EventListener implements Listener {
         Component messageComponent = event.message();
         String rawMessage = LegacyComponentSerializer.legacyAmpersand().serialize(messageComponent);
 
-        boolean requirePrefix = OpenMentions.GetConfig().getBoolean("formatting.requirePrefix");
+        boolean requirePrefix = OpenMentions.Config().requireSymbol;
         int mentionCount = 0;
-        final int maxMentionCount = OpenMentions.GetConfig().getInt("settings.maxMentionsPerMessage");
+        final int maxMentionCount = OpenMentions.Config().maxMentionsPerMessage;
 
         // Build regex pattern for mention prefixes
         StringBuilder regexPattern = new StringBuilder();
         boolean isFirst = true;
-        for (var prefix : OpenMentions.GetConfig().getStringList("formatting.symbols")) {
+        for (var prefix : OpenMentions.Config().symbols) {
             if (!isFirst) {
                 regexPattern.append(String.format("|%s{player}", prefix));
             } else {
@@ -110,8 +110,7 @@ public class EventListener implements Listener {
             regexPattern.append("|{player}");
         }
 
-        boolean allowSelfMention = OpenMentions.GetConfig().getBoolean("settings.allowSelfMention");
-        boolean requireOnline = OpenMentions.GetConfig().getBoolean("settings.requireOnline");
+        boolean allowSelfMention = OpenMentions.Config().allowSelfMention;
 
         for (var onlinePlayer : Bukkit.getOnlinePlayers()) {
             // Ignore the sender player to prevent self-mentions

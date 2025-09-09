@@ -1,12 +1,12 @@
 package io.github.tavstaldev.openMentions.managers;
 
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
+import io.github.tavstaldev.openMentions.OMConfig;
 import io.github.tavstaldev.openMentions.OpenMentions;
 import io.github.tavstaldev.openMentions.models.EMentionDisplay;
 import io.github.tavstaldev.openMentions.models.EMentionPreference;
 import io.github.tavstaldev.openMentions.models.IDatabase;
 import io.github.tavstaldev.openMentions.models.PlayerDatabaseData;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
@@ -22,12 +22,7 @@ import java.util.UUID;
  * Implements the IDatabase interface to handle player data storage and retrieval.
  */
 public class SqlLiteManager implements IDatabase {
-    /**
-     * Retrieves the plugin configuration.
-     *
-     * @return The plugin's configuration file.
-     */
-    private static FileConfiguration getConfig() { return OpenMentions.Instance.getConfig(); }
+    private OMConfig _config;
 
     /** Logger instance for logging messages related to SqlLiteManager. */
     private static final PluginLogger _logger = OpenMentions.Logger().WithModule(SqlLiteManager.class);
@@ -36,7 +31,9 @@ public class SqlLiteManager implements IDatabase {
      * Loads the database manager. No operation is performed for SQLite.
      */
     @Override
-    public void load() {}
+    public void load() {
+        _config = OpenMentions.Config();
+    }
 
     /**
      * Unloads the database manager. No operation is performed for SQLite.
@@ -52,7 +49,7 @@ public class SqlLiteManager implements IDatabase {
     public Connection CreateConnection() {
         try {
             Class.forName("org.sqlite.JDBC");
-            return DriverManager.getConnection(String.format("jdbc:sqlite:plugins/OpenMentions/%s.db", getConfig().getString("storage.filename")));
+            return DriverManager.getConnection(String.format("jdbc:sqlite:plugins/OpenMentions/%s.db", _config.storageFilename));
         } catch (Exception ex) {
             _logger.Error(String.format("Unknown error happened while creating db connection...\n%s", ex.getMessage()));
             return null;
@@ -70,7 +67,7 @@ public class SqlLiteManager implements IDatabase {
                             "Sound VARCHAR(200) NOT NULL, " +
                             "Display VARCHAR(32) NOT NULL, " +
                             "Preference VARCHAR(32) NOT NULL);",
-                    getConfig().getString("storage.tablePrefix")
+                    _config.storageTablePrefix
             );
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.executeUpdate();
@@ -92,7 +89,7 @@ public class SqlLiteManager implements IDatabase {
         try (Connection connection = CreateConnection()) {
             String sql = String.format("INSERT INTO %s_players (PlayerId, Sound, Display, Preference) " +
                             "VALUES (?, ?, ?, ?);",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, playerId.toString());
                 statement.setString(2, soundKey);
@@ -115,7 +112,7 @@ public class SqlLiteManager implements IDatabase {
     public void updateSound(UUID playerId, String soundKey) {
         try (Connection connection = CreateConnection()) {
             String sql = String.format("UPDATE %s_players SET Sound=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, soundKey);
                 statement.setString(2, playerId.toString());
@@ -136,7 +133,7 @@ public class SqlLiteManager implements IDatabase {
     public void updateDisplay(UUID playerId, EMentionDisplay display) {
         try (Connection connection = CreateConnection()) {
             String sql = String.format("UPDATE %s_players SET Display=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, display.name());
                 statement.setString(2, playerId.toString());
@@ -157,7 +154,7 @@ public class SqlLiteManager implements IDatabase {
     public void updatePreference(UUID playerId, EMentionPreference preference) {
         try (Connection connection = CreateConnection()) {
             String sql = String.format("UPDATE %s_players SET Preference=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, preference.name());
                 statement.setString(2, playerId.toString());
@@ -180,7 +177,7 @@ public class SqlLiteManager implements IDatabase {
     public void updateData(UUID playerId, String soundKey, EMentionDisplay display, EMentionPreference preference) {
         try (Connection connection = CreateConnection()) {
             String sql = String.format("UPDATE %s_players SET Sound=?, Display=?, Preference=? WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, soundKey);
                 statement.setString(2, display.name());
@@ -202,7 +199,7 @@ public class SqlLiteManager implements IDatabase {
     public void removeData(UUID playerId) {
         try (Connection connection = CreateConnection()) {
             String sql = String.format("DELETE FROM %s_players WHERE PlayerId=?;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, playerId.toString());
                 statement.executeUpdate();
@@ -233,7 +230,7 @@ public class SqlLiteManager implements IDatabase {
         List<PlayerDatabaseData> data = new ArrayList<>();
         try (Connection connection = CreateConnection()) {
             String sql = String.format("SELECT * FROM %s_players;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) {
@@ -264,7 +261,7 @@ public class SqlLiteManager implements IDatabase {
         PlayerDatabaseData data = null;
         try (Connection connection = CreateConnection()) {
             String sql = String.format("SELECT * FROM %s_players WHERE PlayerId=? LIMIT 1;",
-                    getConfig().getString("storage.tablePrefix"));
+                    _config.storageTablePrefix);
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, playerId.toString());
                 try (ResultSet result = statement.executeQuery()) {

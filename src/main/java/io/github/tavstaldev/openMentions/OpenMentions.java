@@ -13,7 +13,6 @@ import io.github.tavstaldev.openMentions.managers.SqlLiteManager;
 import io.github.tavstaldev.openMentions.models.ICombatManager;
 import io.github.tavstaldev.openMentions.models.IDatabase;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -47,8 +46,8 @@ public final class OpenMentions extends PluginBase {
      *
      * @return The plugin's configuration file.
      */
-    public static FileConfiguration GetConfig() {
-        return Instance.getConfig();
+    public static OMConfig Config() {
+        return (OMConfig) Instance.getConfig();
     }
 
     /** Database manager for handling player data storage. */
@@ -105,7 +104,7 @@ public final class OpenMentions extends PluginBase {
         }
 
         // Create Database
-        String databaseType = this.getConfig().getString("storage.type");
+        String databaseType = Config().storageType;
         if (databaseType == null)
             databaseType = "sqlite";
         switch (databaseType.toLowerCase()) {
@@ -120,6 +119,7 @@ public final class OpenMentions extends PluginBase {
             }
         }
         Database.checkSchema();
+        Database.load();
 
         // Register Commands
         _logger.Debug("Registering commands...");
@@ -130,16 +130,18 @@ public final class OpenMentions extends PluginBase {
         }
 
         _logger.Ok(String.format("%s has been successfully loaded.", getProjectName()));
-        isUpToDate().thenAccept(upToDate -> {
-            if (upToDate) {
-                _logger.Ok("Plugin is up to date!");
-            } else {
-                _logger.Warn("A new version of the plugin is available: " + getDownloadUrl());
-            }
-        }).exceptionally(e -> {
-            _logger.Error("Failed to determine update status: " + e.getMessage());
-            return null;
-        });
+        if (Config().checkForUpdates) {
+            isUpToDate().thenAccept(upToDate -> {
+                if (upToDate) {
+                    _logger.Ok("Plugin is up to date!");
+                } else {
+                    _logger.Warn("A new version of the plugin is available: " + getDownloadUrl());
+                }
+            }).exceptionally(e -> {
+                _logger.Error("Failed to determine update status: " + e.getMessage());
+                return null;
+            });
+        }
     }
 
     /**
@@ -160,7 +162,7 @@ public final class OpenMentions extends PluginBase {
         _translator.Load();
         _logger.Debug("Localizations reloaded.");
         _logger.Debug("Reloading configuration...");
-        this.reloadConfig();
+        this._config.load();
         _logger.Debug("Configuration reloaded.");
     }
 }

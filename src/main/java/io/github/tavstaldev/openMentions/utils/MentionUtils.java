@@ -31,7 +31,7 @@ public class MentionUtils {
      * @return The formatted mention string.
      */
     public static String getFormattedMention(Player player) {
-        var config = OpenMentions.GetConfig();
+        var config = OpenMentions.Config();
         String format = config.getString("formatting.defaultFormat");
         var permissionFormats = config.get("formatting.permissionBasedFormats");
         if (permissionFormats != null) {
@@ -102,7 +102,7 @@ public class MentionUtils {
             }
         }
 
-        var cooldownTime = OpenMentions.GetConfig().getInt("settings.mentionCooldown");
+        var cooldownTime = OpenMentions.Config().mentionCooldown;
         if (cooldownTime < 1)
             return;
 
@@ -121,8 +121,8 @@ public class MentionUtils {
      */
     private static void sendMention(Player player, String soundKey, EMentionDisplay display, boolean isSilent, Player mentioner) {
         String actionBarMessage = OpenMentions.Instance.getTranslator().Localize(player, "General.ActionBarMessage", Map.of("player", mentioner.getName()));
-        float volume = (float)OpenMentions.GetConfig().getDouble("settings.volume");
-        float pitch = (float)OpenMentions.GetConfig().getDouble("settings.pitch");
+        float volume = (float)OpenMentions.Config().volume;
+        float pitch = (float)OpenMentions.Config().pitch;
         XSound sound;
         Optional<XSound> soundResult = SoundUtils.getSound(soundKey);
         // Fallback sound if not found
