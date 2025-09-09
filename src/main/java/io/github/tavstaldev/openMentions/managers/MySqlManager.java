@@ -59,6 +59,8 @@ public class MySqlManager implements IDatabase {
     public HikariDataSource CreateDataSource() {
         try {
             HikariConfig config = new HikariConfig();
+            if (_config == null)
+                _config = OpenMentions.Config();
             config.setJdbcUrl(String.format("jdbc:mysql://%s:%s/%s",
                     _config.storageHost,
                     _config.storagePort,

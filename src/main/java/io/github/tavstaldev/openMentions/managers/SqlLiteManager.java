@@ -48,6 +48,8 @@ public class SqlLiteManager implements IDatabase {
      */
     public Connection CreateConnection() {
         try {
+            if (_config == null)
+                _config = OpenMentions.Config();
             Class.forName("org.sqlite.JDBC");
             return DriverManager.getConnection(String.format("jdbc:sqlite:plugins/OpenMentions/%s.db", _config.storageFilename));
         } catch (Exception ex) {
