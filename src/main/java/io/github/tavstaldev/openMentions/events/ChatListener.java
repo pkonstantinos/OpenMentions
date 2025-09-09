@@ -3,9 +3,6 @@ package io.github.tavstaldev.openMentions.events;
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
 import io.github.tavstaldev.openMentions.OpenMentions;
 import io.github.tavstaldev.openMentions.utils.MentionUtils;
-import io.papermc.paper.chat.ChatRenderer;
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,14 +24,14 @@ public class ChatListener implements Listener {
         Player source = event.getPlayer();
         String rawMessage = event.getMessage();
 
-        boolean requirePrefix = OpenMentions.GetConfig().getBoolean("formatting.requirePrefix");
+        boolean requirePrefix = OpenMentions.Config().requireSymbol;
         int mentionCount = 0;
-        final int maxMentionCount = OpenMentions.GetConfig().getInt("settings.maxMentionsPerMessage");
+        final int maxMentionCount = OpenMentions.Config().maxMentionsPerMessage;
 
         // Build regex pattern for mention prefixes
         StringBuilder regexPattern = new StringBuilder();
         boolean isFirst = true;
-        for (var prefix : OpenMentions.GetConfig().getStringList("formatting.symbols")) {
+        for (var prefix : OpenMentions.Config().symbols) {
             if (!isFirst) {
                 regexPattern.append(String.format("|%s{player}", prefix));
             } else {
@@ -46,8 +43,7 @@ public class ChatListener implements Listener {
             regexPattern.append("|{player}");
         }
 
-        boolean allowSelfMention = OpenMentions.GetConfig().getBoolean("settings.allowSelfMention");
-        //boolean requireOnline = OpenMentions.GetConfig().getBoolean("settings.requireOnline");
+        boolean allowSelfMention = OpenMentions.Config().allowSelfMention;
 
         for (var onlinePlayer : Bukkit.getOnlinePlayers()) {
             // Ignore the sender player to prevent self-mentions

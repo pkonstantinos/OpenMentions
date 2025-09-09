@@ -6,14 +6,9 @@ import io.github.tavstaldev.openMentions.managers.PlayerCacheManager;
 import io.github.tavstaldev.openMentions.models.EMentionDisplay;
 import io.github.tavstaldev.openMentions.models.EMentionPreference;
 import io.github.tavstaldev.openMentions.models.PlayerDatabaseData;
-import io.github.tavstaldev.openMentions.utils.MentionUtils;
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -43,14 +38,14 @@ public class PlayerListener implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        var config = OpenMentions.GetConfig();
+        var config = OpenMentions.Config();
         Player player = event.getPlayer();
         var playerId = player.getUniqueId();
         PlayerDatabaseData databaseData = OpenMentions.Database.getData(playerId);
         if (databaseData == null) {
-            var defaultSoundKey = config.getString("settings.defaultSound");
-            var defaultDisplay = EMentionDisplay.valueOf(config.getString("settings.defaultDisplay"));
-            var defaultPreference = EMentionPreference.valueOf(config.getString("settings.defaultPreference"));
+            var defaultSoundKey = config.defaultSound;
+            var defaultDisplay = EMentionDisplay.valueOf(config.defaultDisplay);
+            var defaultPreference = EMentionPreference.valueOf(config.defaultPreference);
             databaseData = new PlayerDatabaseData(
                     playerId,
                     defaultSoundKey,
