@@ -18,7 +18,6 @@ import io.github.tavstaldev.openMentions.models.IDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Arrays;
 
 /**
  * Main class for the OpenMentions plugin.
@@ -98,7 +97,6 @@ public final class OpenMentions extends PluginBase {
         }
         // Initialize EssentialsX
         Plugin essentialsXPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
-        Arrays.stream(Bukkit.getPluginManager().getPlugins()).forEach(System.out::println);
         if (essentialsXPlugin != null) {
             EssentialsX = (Essentials) essentialsXPlugin;
             getLogger().info("Successfully hooked into EssentialsX!");
