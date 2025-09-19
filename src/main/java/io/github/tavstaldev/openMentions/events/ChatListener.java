@@ -1,6 +1,5 @@
 package io.github.tavstaldev.openMentions.events;
 
-import com.earth2me.essentials.Essentials;
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
 import io.github.tavstaldev.openMentions.OpenMentions;
 import io.github.tavstaldev.openMentions.utils.MentionUtils;
