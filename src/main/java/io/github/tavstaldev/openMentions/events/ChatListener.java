@@ -1,5 +1,6 @@
 package io.github.tavstaldev.openMentions.events;
 
+import com.earth2me.essentials.Essentials;
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
 import io.github.tavstaldev.openMentions.OpenMentions;
 import io.github.tavstaldev.openMentions.utils.MentionUtils;
@@ -53,6 +54,10 @@ public class ChatListener implements Listener {
             String onlinePlayerName = onlinePlayer.getName();
             if (!rawMessage.contains(onlinePlayerName))
                 continue;
+
+            if(OpenMentions.EssentialsX.getUser(onlinePlayer).isVanished()){
+                continue;
+            }
 
             String mentionPrefix = MentionUtils.getFormattedMention(onlinePlayer);
             String localRegexPattern = regexPattern.toString().replace("{player}", onlinePlayerName);
