@@ -1,5 +1,7 @@
 package io.github.tavstaldev.openMentions;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.IEssentials;
 import io.github.tavstaldev.minecorelib.PluginBase;
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
 import io.github.tavstaldev.minecorelib.core.PluginTranslator;
@@ -16,6 +18,8 @@ import io.github.tavstaldev.openMentions.models.ICombatManager;
 import io.github.tavstaldev.openMentions.models.IDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Arrays;
 
 /**
  * Main class for the OpenMentions plugin.
@@ -57,6 +61,8 @@ public final class OpenMentions extends PluginBase {
 
     /** Combat manager for handling combat-related features. */
     public static ICombatManager CombatManager;
+    /** EssentialsX. */
+    public static Essentials EssentialsX;
 
     /**
      * Constructor for the OpenMentions plugin.
@@ -90,6 +96,16 @@ public final class OpenMentions extends PluginBase {
         } else {
             CombatManager = new CombatManager();
             _logger.Warn("CombatLogX plugin not found or not enabled. Combat management features will be disabled.");
+        }
+        // Initialize EssentialsX
+        Plugin essentialsXPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
+        Arrays.stream(Bukkit.getPluginManager().getPlugins()).forEach(System.out::println);
+        if (essentialsXPlugin != null) {
+            EssentialsX = (Essentials) essentialsXPlugin;
+            getLogger().info("Successfully hooked into EssentialsX!");
+        } else {
+            EssentialsX = null;
+            _logger.Warn("EssentialsX plugin not found or not enabled. Combat management features will be disabled.");
         }
 
         // Register Events
