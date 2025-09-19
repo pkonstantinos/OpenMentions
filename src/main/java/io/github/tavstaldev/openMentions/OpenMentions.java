@@ -1,7 +1,6 @@
 package io.github.tavstaldev.openMentions;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IEssentials;
 import io.github.tavstaldev.minecorelib.PluginBase;
 import io.github.tavstaldev.minecorelib.core.PluginLogger;
 import io.github.tavstaldev.minecorelib.core.PluginTranslator;
