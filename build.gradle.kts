@@ -49,6 +49,14 @@ repositories {
         name = "sirblobman-public" // CombatLogX
         url = uri("https://nexus.sirblobman.xyz/public/")
     }
+    maven {
+        name = "essentialsx-releases"
+        url = uri("https://repo.essentialsx.net/releases/")
+    }
+    maven {
+        name = "papermc"
+        url = uri("https://papermc.io/repo/repository/maven-public/")
+    }
 }
 
 dependencies {
@@ -58,12 +66,16 @@ dependencies {
     compileOnly("com.github.sirblobman.api:core:${sirblobmanApiVersion}")
     compileOnly("com.github.sirblobman.combatlogx:api:${sirblobmanCombatLogVersion}")
 
+    // EssentialsX
+    compileOnly("net.essentialsx:EssentialsX:2.21.2")
     // HikariCP for database connection pooling
     implementation("com.zaxxer:HikariCP:${hikariCpVersion}")
     // Custom library for core functionality
     implementation(files("libs/MineCoreLib-${mineCoreLibVersion}.jar"))
     // XSeries
     implementation("com.github.cryptomorin:XSeries:${xseriesVersion}")
+
+
 }
 
 // Disable the default JAR task
