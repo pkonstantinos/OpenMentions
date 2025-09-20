@@ -54,9 +54,10 @@ public class ChatListener implements Listener {
             if (!rawMessage.contains(onlinePlayerName))
                 continue;
 
-            if(OpenMentions.EssentialsX.getUser(onlinePlayer).isVanished()){
+            if(OpenMentions.EssentialsX != null && OpenMentions.EssentialsX.getUser(onlinePlayer).isVanished()){
                 continue;
             }
+
 
             String mentionPrefix = MentionUtils.getFormattedMention(onlinePlayer);
             String localRegexPattern = regexPattern.toString().replace("{player}", onlinePlayerName);
